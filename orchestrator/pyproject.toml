@@ -1,0 +1,20 @@
+[project]
+name = "orchestrator"
+version = "0.1.0"
+description = "Near-real-time energy market analytics orchestration"
+authors = [{name = "Sebastian Arce", email='sebastianarce25@gmail.com'}]
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "dagster>=1.12.13",
+    "dagster-webserver>=1.12.13",
+    "httpx>=0.28.1",
+    "pydantic>=2.12.5",
+    "pydantic-settings>=2.12.0",
+    "tenacity>=9.1.2",
+]
+
+[dependency-groups]
+dev = [
+    "dagster-dg-cli>=1.12.13",
+]
