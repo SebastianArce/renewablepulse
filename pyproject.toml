@@ -4,11 +4,12 @@ version = '0.1.0'
 requires-python = ">=3.12"
 
 [tool.uv.workspace]
-members = ['orchestrator']
+members = ['orchestrator', 'backend', 'packages/shared']
 
 [dependency-groups]
 dev = [
     "pytest>=9.0.2",
     "ruff>=0.15.0",
     "ty>=0.0.14",
+    "httpx>=0.28.1",
 ]
