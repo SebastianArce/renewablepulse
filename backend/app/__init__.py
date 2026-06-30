@@ -1,0 +1,1 @@
+"""RenewablePulse FastAPI backend."""
