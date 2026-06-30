@@ -32,13 +32,19 @@ def _seed(ch: Client) -> None:
     )
     ch.command(
         "CREATE TABLE mart_carbon "
-        "(from_ts DateTime, intensity_gco2 Nullable(Int32), intensity_index String) "
+        "(from_ts DateTime, forecast_gco2 Nullable(Int32), actual_gco2 Nullable(Int32), "
+        "intensity_gco2 Nullable(Int32), intensity_index String) "
         "ENGINE = MergeTree ORDER BY from_ts"
     )
     instant = dt.datetime(2026, 6, 30, 20, 0)
+    older = dt.datetime(2026, 6, 30, 14, 0)  # 6h earlier — for window tests
     ch.insert(
         "mart_generation_by_fuel",
-        [[instant, "CCGT", 16228.0, 57.35], [instant, "WIND", 2060.0, 7.28]],
+        [
+            [instant, "CCGT", 16228.0, 57.35],
+            [instant, "WIND", 2060.0, 7.28],
+            [older, "CCGT", 10000.0, 50.0],
+        ],
         column_names=["measured_at", "fuel_type", "generation_mw", "share_pct"],
     )
     ch.insert(
@@ -54,8 +60,14 @@ def _seed(ch: Client) -> None:
     )
     ch.insert(
         "mart_carbon",
-        [[dt.datetime(2026, 6, 30, 19, 0), 225, "high"]],
-        column_names=["from_ts", "intensity_gco2", "intensity_index"],
+        [[dt.datetime(2026, 6, 30, 19, 0), 230, 225, 225, "high"]],
+        column_names=[
+            "from_ts",
+            "forecast_gco2",
+            "actual_gco2",
+            "intensity_gco2",
+            "intensity_index",
+        ],
     )
 
 

@@ -33,3 +33,29 @@ class Snapshot(BaseModel):
     generation: list[GenerationMixItem]
     supply_demand: SupplyDemand | None
     carbon: Carbon | None
+
+
+# --- time-series history points ---
+
+
+class GenerationPoint(BaseModel):
+    measured_at: dt.datetime
+    fuel_type: str
+    generation_mw: float
+    share_pct: float | None
+
+
+class SupplyDemandPoint(BaseModel):
+    period_start: dt.datetime
+    settlement_period: int
+    demand_mw: int
+    transmission_demand_mw: int
+    total_generation_mw: float | None
+
+
+class CarbonPoint(BaseModel):
+    from_ts: dt.datetime
+    forecast_gco2: int | None
+    actual_gco2: int | None
+    intensity_gco2: int | None
+    intensity_index: str
