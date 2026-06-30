@@ -9,7 +9,8 @@ from clickhouse_connect.driver.client import Client
 from dagster import AssetExecutionContext, MaterializeResult, asset
 
 from shared.clickhouse import get_client
-from shared.models import DemandRecord, FuelInstRecord
+from shared.models import CarbonIntensityRecord, DemandRecord, FuelInstRecord
+from orchestrator.carbon import fetch_carbon_intensity, parse_carbon_intensity
 from orchestrator.elexon import (
     fetch_demand,
     fetch_fuelinst,
@@ -34,6 +35,16 @@ DEMAND_COLUMNS = [
     "measured_at",
     "indo_mw",
     "itsdo_mw",
+    "ingest_version",
+]
+
+CARBON_TABLE = "raw.carbon_intensity_national"
+CARBON_COLUMNS = [
+    "from_ts",
+    "to_ts",
+    "forecast_gco2",
+    "actual_gco2",
+    "intensity_index",
     "ingest_version",
 ]
 
@@ -81,6 +92,25 @@ def load_demand(
     return len(rows)
 
 
+def load_carbon_intensity(
+    client: Client, records: list[CarbonIntensityRecord], ingest_version: int
+) -> int:
+    """Insert carbon-intensity records tagged with an ingest version."""
+    rows = [
+        [
+            r.from_ts,
+            r.to_ts,
+            r.forecast_gco2,
+            r.actual_gco2,
+            r.intensity_index,
+            ingest_version,
+        ]
+        for r in records
+    ]
+    client.insert(CARBON_TABLE, rows, column_names=CARBON_COLUMNS)
+    return len(rows)
+
+
 @asset(description="Instantaneous GB generation by fuel type (Elexon FUELINST).")
 def generation_fuelinst(context: AssetExecutionContext) -> MaterializeResult:
     """Fetch FUELINST, validate, and load into ClickHouse raw."""
@@ -107,4 +137,20 @@ def demand(context: AssetExecutionContext) -> MaterializeResult:
     finally:
         client.close()
     context.log.info(f"Ingested {rows} demand rows (ingest_version={ingest_version})")
+    return MaterializeResult(metadata={"rows": rows, "ingest_version": ingest_version})
+
+
+@asset(
+    description="National carbon intensity per half-hour (NESO Carbon Intensity API)."
+)
+def carbon_intensity_national(context: AssetExecutionContext) -> MaterializeResult:
+    """Fetch today's national carbon intensity, validate, and load into ClickHouse raw."""
+    records = parse_carbon_intensity(fetch_carbon_intensity())
+    ingest_version = _ingest_version()
+    client = get_client()
+    try:
+        rows = load_carbon_intensity(client, records, ingest_version)
+    finally:
+        client.close()
+    context.log.info(f"Ingested {rows} carbon rows (ingest_version={ingest_version})")
     return MaterializeResult(metadata={"rows": rows, "ingest_version": ingest_version})

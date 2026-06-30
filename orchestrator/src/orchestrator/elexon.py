@@ -3,23 +3,16 @@
 from __future__ import annotations
 
 import httpx
-from tenacity import retry, stop_after_attempt, wait_exponential
 
 from shared.models import DemandRecord, FuelInstRecord
+from orchestrator._retry import retrying
 
 ELEXON_BASE = "https://data.elexon.co.uk/bmrs/api/v1"
 FUELINST_URL = f"{ELEXON_BASE}/datasets/FUELINST"
 DEMAND_URL = f"{ELEXON_BASE}/demand/outturn"
 
-# Shared retry policy for transient HTTP failures.
-_retrying = retry(
-    stop=stop_after_attempt(3),
-    wait=wait_exponential(multiplier=1, max=10),
-    reraise=True,
-)
 
-
-@_retrying
+@retrying
 def fetch_fuelinst(client: httpx.Client | None = None) -> list[dict]:
     """Fetch the latest FUELINST rows. Retries transient failures with backoff."""
     owns_client = client is None
@@ -33,7 +26,7 @@ def fetch_fuelinst(client: httpx.Client | None = None) -> list[dict]:
             client.close()
 
 
-@_retrying
+@retrying
 def fetch_demand(
     settlement_date_from: str,
     settlement_date_to: str,
