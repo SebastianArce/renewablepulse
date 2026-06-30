@@ -5,6 +5,8 @@ description = "Shared market-data models and ClickHouse client for RenewablePuls
 requires-python = ">=3.12"
 dependencies = [
     "pydantic>=2.12.5",
+    "pydantic-settings>=2.12.0",
+    "clickhouse-connect>=0.8.0",
 ]
 
 [build-system]

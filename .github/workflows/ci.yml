@@ -16,6 +16,20 @@ jobs:
   quality:
     name: Lint, type-check & test
     runs-on: ubuntu-latest
+    services:
+      clickhouse:
+        image: clickhouse/clickhouse-server:25.3
+        ports:
+          - 8123:8123
+        env:
+          CLICKHOUSE_USER: renewablepulse
+          CLICKHOUSE_PASSWORD: renewablepulse
+          CLICKHOUSE_DB: renewablepulse
+        options: >-
+          --health-cmd "wget --no-verbose --tries=1 --spider http://localhost:8123/ping || exit 1"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - uses: actions/checkout@v4
 
@@ -38,4 +52,10 @@ jobs:
         run: uv run ty check
 
       - name: Test (pytest)
+        env:
+          CLICKHOUSE_HOST: localhost
+          CLICKHOUSE_PORT: "8123"
+          CLICKHOUSE_USER: renewablepulse
+          CLICKHOUSE_PASSWORD: renewablepulse
+          CLICKHOUSE_DB: renewablepulse
         run: uv run pytest
