@@ -13,3 +13,9 @@ dev = [
     "ty>=0.0.14",
     "httpx>=0.28.1",
 ]
+
+[tool.pytest.ini_options]
+# importlib mode lets multiple `tests/` dirs coexist across workspace packages
+# without an __init__.py package-name clash.
+addopts = "--import-mode=importlib"
+testpaths = ["backend/tests", "packages/shared/tests"]
