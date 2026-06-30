@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import datetime as dt
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import AliasPath, BaseModel, ConfigDict, Field
 
 
 class FuelInstRecord(BaseModel):
@@ -36,3 +36,23 @@ class DemandRecord(BaseModel):
     measured_at: dt.datetime = Field(alias="startTime")
     indo_mw: int = Field(alias="initialDemandOutturn")
     itsdo_mw: int = Field(alias="initialTransmissionSystemDemandOutturn")
+
+
+class CarbonIntensityRecord(BaseModel):
+    """One national carbon-intensity half-hour from the NESO Carbon Intensity API.
+
+    The API nests forecast/actual/index under an `intensity` object; AliasPath flattens
+    them. forecast/actual can be null (e.g. future half-hours have no actual yet).
+    """
+
+    model_config = ConfigDict(populate_by_name=True)
+
+    from_ts: dt.datetime = Field(alias="from")
+    to_ts: dt.datetime = Field(alias="to")
+    forecast_gco2: int | None = Field(
+        default=None, validation_alias=AliasPath("intensity", "forecast")
+    )
+    actual_gco2: int | None = Field(
+        default=None, validation_alias=AliasPath("intensity", "actual")
+    )
+    intensity_index: str = Field(validation_alias=AliasPath("intensity", "index"))
