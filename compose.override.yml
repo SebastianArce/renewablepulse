@@ -47,9 +47,9 @@ services:
     environment:
       CLICKHOUSE_HOST: clickhouse
       CLICKHOUSE_PORT: "8123"
-      CLICKHOUSE_USER: ${CLICKHOUSE_USER:-renewablepulse}
-      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD:-renewablepulse}
-      CLICKHOUSE_DB: ${CLICKHOUSE_DB:-renewablepulse}
+      CLICKHOUSE_USER: ${CLICKHOUSE_USER:-tianguiswatt}
+      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD:-tianguiswatt}
+      CLICKHOUSE_DB: ${CLICKHOUSE_DB:-tianguiswatt}
     ports:
       - "8000:8000"
     depends_on:

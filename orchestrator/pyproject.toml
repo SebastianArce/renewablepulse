@@ -32,4 +32,4 @@ packages = ["src/orchestrator"]
 
 [tool.dagster]
 module_name = "orchestrator.definitions"
-code_location_name = "renewablepulse"
+code_location_name = "tianguiswatt"

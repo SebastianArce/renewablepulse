@@ -1,1 +1,1 @@
-"""Dagster orchestration: ingestion assets for RenewablePulse."""
+"""Dagster orchestration: ingestion assets for TianguisWatt."""

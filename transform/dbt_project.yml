@@ -1,11 +1,11 @@
-name: renewablepulse
+name: tianguiswatt
 version: "1.0.0"
-profile: renewablepulse
+profile: tianguiswatt
 
 model-paths: ["models"]
 
 models:
-  renewablepulse:
+  tianguiswatt:
     staging:
       +materialized: view
     marts:

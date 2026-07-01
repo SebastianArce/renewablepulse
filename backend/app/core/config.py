@@ -8,7 +8,7 @@ class Settings(BaseSettings):
 
     model_config = SettingsConfigDict(env_prefix="RP_", env_file=".env", extra="ignore")
 
-    app_name: str = "RenewablePulse API"
+    app_name: str = "TianguisWatt API"
 
 
 settings = Settings()

@@ -1,6 +1,6 @@
 # orchestrator
 
-Dagster orchestration for RenewablePulse — ingestion assets that fetch GB
+Dagster orchestration for TianguisWatt — ingestion assets that fetch GB
 electricity-market data and land it in ClickHouse `raw.*`.
 
 Run the Dagster UI locally:

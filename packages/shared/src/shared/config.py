@@ -12,6 +12,6 @@ class ClickHouseSettings(BaseSettings):
 
     host: str = "localhost"
     port: int = 8123
-    user: str = "renewablepulse"
-    password: str = "renewablepulse"
-    db: str = "renewablepulse"
+    user: str = "tianguiswatt"
+    password: str = "tianguiswatt"
+    db: str = "tianguiswatt"

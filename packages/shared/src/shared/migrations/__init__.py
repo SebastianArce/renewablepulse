@@ -1,1 +1,1 @@
-"""Versioned ClickHouse schema migrations for tables RenewablePulse owns (raw.*)."""
+"""Versioned ClickHouse schema migrations for tables TianguisWatt owns (raw.*)."""

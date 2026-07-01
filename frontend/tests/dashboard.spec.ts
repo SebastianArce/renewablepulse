@@ -47,7 +47,7 @@ test('dashboard renders live data from the API', async ({ page }) => {
 
   await page.goto('/')
 
-  await expect(page.getByRole('heading', { name: 'RenewablePulse' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'TianguisWatt' })).toBeVisible()
   await expect(page.getByText('Generation mix')).toBeVisible()
   await expect(page.getByText('Supply vs demand')).toBeVisible()
   await expect(page.getByText('Carbon intensity')).toBeVisible()

@@ -9,7 +9,7 @@ export default function App() {
   return (
     <main className="min-h-screen bg-neutral-950 text-neutral-100">
       <header className="border-b border-neutral-800 px-6 py-5">
-        <h1 className="text-2xl font-bold tracking-tight">RenewablePulse</h1>
+        <h1 className="text-2xl font-bold tracking-tight">TianguisWatt</h1>
         <p className="text-sm text-neutral-400">
           A live view of the GB electricity market — the charts update automatically as
           new data arrives.
