@@ -4,8 +4,9 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
 // Proxy /api to the backend in dev/preview; in production Traefik routes it.
-// Explicit 127.0.0.1 (not localhost) to avoid IPv6 ::1 vs IPv4 mismatches.
-const proxy = { '/api': 'http://127.0.0.1:8000' }
+// Target is env-driven: 127.0.0.1 for host dev, http://backend:8000 inside compose.
+const target = process.env.VITE_API_PROXY ?? 'http://127.0.0.1:8000'
+const proxy = { '/api': target }
 
 // https://vite.dev/config/
 export default defineConfig({
