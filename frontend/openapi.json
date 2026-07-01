@@ -1,0 +1,548 @@
+{
+  "components": {
+    "schemas": {
+      "Carbon": {
+        "properties": {
+          "from_ts": {
+            "format": "date-time",
+            "title": "From Ts",
+            "type": "string"
+          },
+          "intensity_gco2": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Intensity Gco2"
+          },
+          "intensity_index": {
+            "title": "Intensity Index",
+            "type": "string"
+          }
+        },
+        "required": [
+          "from_ts",
+          "intensity_gco2",
+          "intensity_index"
+        ],
+        "title": "Carbon",
+        "type": "object"
+      },
+      "CarbonPoint": {
+        "properties": {
+          "actual_gco2": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Actual Gco2"
+          },
+          "forecast_gco2": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Forecast Gco2"
+          },
+          "from_ts": {
+            "format": "date-time",
+            "title": "From Ts",
+            "type": "string"
+          },
+          "intensity_gco2": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Intensity Gco2"
+          },
+          "intensity_index": {
+            "title": "Intensity Index",
+            "type": "string"
+          }
+        },
+        "required": [
+          "from_ts",
+          "forecast_gco2",
+          "actual_gco2",
+          "intensity_gco2",
+          "intensity_index"
+        ],
+        "title": "CarbonPoint",
+        "type": "object"
+      },
+      "GenerationMixItem": {
+        "properties": {
+          "fuel_type": {
+            "title": "Fuel Type",
+            "type": "string"
+          },
+          "generation_mw": {
+            "title": "Generation Mw",
+            "type": "number"
+          },
+          "share_pct": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Share Pct"
+          }
+        },
+        "required": [
+          "fuel_type",
+          "generation_mw",
+          "share_pct"
+        ],
+        "title": "GenerationMixItem",
+        "type": "object"
+      },
+      "GenerationPoint": {
+        "properties": {
+          "fuel_type": {
+            "title": "Fuel Type",
+            "type": "string"
+          },
+          "generation_mw": {
+            "title": "Generation Mw",
+            "type": "number"
+          },
+          "measured_at": {
+            "format": "date-time",
+            "title": "Measured At",
+            "type": "string"
+          },
+          "share_pct": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Share Pct"
+          }
+        },
+        "required": [
+          "measured_at",
+          "fuel_type",
+          "generation_mw",
+          "share_pct"
+        ],
+        "title": "GenerationPoint",
+        "type": "object"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "title": "Detail",
+            "type": "array"
+          }
+        },
+        "title": "HTTPValidationError",
+        "type": "object"
+      },
+      "Snapshot": {
+        "description": "Latest values across all domains for the dashboard's first paint.",
+        "properties": {
+          "carbon": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Carbon"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "generation": {
+            "items": {
+              "$ref": "#/components/schemas/GenerationMixItem"
+            },
+            "title": "Generation",
+            "type": "array"
+          },
+          "measured_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Measured At"
+          },
+          "supply_demand": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SupplyDemand"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "measured_at",
+          "generation",
+          "supply_demand",
+          "carbon"
+        ],
+        "title": "Snapshot",
+        "type": "object"
+      },
+      "SupplyDemand": {
+        "properties": {
+          "demand_mw": {
+            "title": "Demand Mw",
+            "type": "integer"
+          },
+          "settlement_period": {
+            "title": "Settlement Period",
+            "type": "integer"
+          },
+          "total_generation_mw": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total Generation Mw"
+          },
+          "transmission_demand_mw": {
+            "title": "Transmission Demand Mw",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "settlement_period",
+          "demand_mw",
+          "transmission_demand_mw",
+          "total_generation_mw"
+        ],
+        "title": "SupplyDemand",
+        "type": "object"
+      },
+      "SupplyDemandPoint": {
+        "properties": {
+          "demand_mw": {
+            "title": "Demand Mw",
+            "type": "integer"
+          },
+          "period_start": {
+            "format": "date-time",
+            "title": "Period Start",
+            "type": "string"
+          },
+          "settlement_period": {
+            "title": "Settlement Period",
+            "type": "integer"
+          },
+          "total_generation_mw": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total Generation Mw"
+          },
+          "transmission_demand_mw": {
+            "title": "Transmission Demand Mw",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "period_start",
+          "settlement_period",
+          "demand_mw",
+          "transmission_demand_mw",
+          "total_generation_mw"
+        ],
+        "title": "SupplyDemandPoint",
+        "type": "object"
+      },
+      "ValidationError": {
+        "properties": {
+          "ctx": {
+            "title": "Context",
+            "type": "object"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Location",
+            "type": "array"
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "RenewablePulse API",
+    "version": "0.1.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/api/carbon": {
+      "get": {
+        "operationId": "carbon_api_carbon_get",
+        "parameters": [
+          {
+            "description": "History window in hours.",
+            "in": "query",
+            "name": "hours",
+            "required": false,
+            "schema": {
+              "default": 6,
+              "description": "History window in hours.",
+              "maximum": 168,
+              "minimum": 1,
+              "title": "Hours",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/CarbonPoint"
+                  },
+                  "title": "Response Carbon Api Carbon Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Carbon"
+      }
+    },
+    "/api/events": {
+      "get": {
+        "description": "Stream update events; the client refetches the affected endpoints on each.",
+        "operationId": "events_api_events_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Events"
+      }
+    },
+    "/api/generation": {
+      "get": {
+        "operationId": "generation_api_generation_get",
+        "parameters": [
+          {
+            "description": "History window in hours.",
+            "in": "query",
+            "name": "hours",
+            "required": false,
+            "schema": {
+              "default": 6,
+              "description": "History window in hours.",
+              "maximum": 168,
+              "minimum": 1,
+              "title": "Hours",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/GenerationPoint"
+                  },
+                  "title": "Response Generation Api Generation Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Generation"
+      }
+    },
+    "/api/health": {
+      "get": {
+        "description": "Liveness probe.",
+        "operationId": "health_api_health_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "title": "Response Health Api Health Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Health"
+      }
+    },
+    "/api/snapshot": {
+      "get": {
+        "operationId": "snapshot_api_snapshot_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Snapshot"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Snapshot"
+      }
+    },
+    "/api/supply-demand": {
+      "get": {
+        "operationId": "supply_demand_api_supply_demand_get",
+        "parameters": [
+          {
+            "description": "History window in hours.",
+            "in": "query",
+            "name": "hours",
+            "required": false,
+            "schema": {
+              "default": 6,
+              "description": "History window in hours.",
+              "maximum": 168,
+              "minimum": 1,
+              "title": "Hours",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/SupplyDemandPoint"
+                  },
+                  "title": "Response Supply Demand Api Supply Demand Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Supply Demand"
+      }
+    }
+  }
+}

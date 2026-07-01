@@ -64,3 +64,41 @@ jobs:
         run: |
           uv run python -c "from shared.migrations.runner import migrate; print(migrate())"
           uv run dbt build --project-dir transform --profiles-dir transform
+
+      - name: OpenAPI schema in sync with backend
+        run: |
+          uv run python -c "import json; from app.main import app; print(json.dumps(app.openapi(), indent=2, sort_keys=True))" > /tmp/openapi.json
+          diff /tmp/openapi.json frontend/openapi.json
+
+  frontend:
+    name: Frontend (build, lint, e2e)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.3.8"
+
+      - name: Install
+        run: bun install --frozen-lockfile
+
+      - name: Generated client in sync with openapi.json
+        run: |
+          bun run gen:client
+          git diff --exit-code src/client/schema.d.ts
+
+      - name: Lint (oxlint)
+        run: bun run lint
+
+      - name: Build
+        run: bun run build
+
+      - name: Install Playwright browser
+        run: bunx playwright install --with-deps chromium
+
+      - name: E2E (Playwright)
+        run: bun run test:e2e
