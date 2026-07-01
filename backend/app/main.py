@@ -1,4 +1,4 @@
-"""RenewablePulse API — application entrypoint."""
+"""TianguisWatt API — application entrypoint."""
 
 from __future__ import annotations
 

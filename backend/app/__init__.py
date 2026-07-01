@@ -1,1 +1,1 @@
-"""RenewablePulse FastAPI backend."""
+"""TianguisWatt FastAPI backend."""

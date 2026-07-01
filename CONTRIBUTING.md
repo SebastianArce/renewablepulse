@@ -1,4 +1,4 @@
-# Contributing to RenewablePulse
+# Contributing to TianguisWatt
 
 This is a portfolio project, but it is developed with the same discipline as a
 production codebase. The git history is intended to be readable as a record of how the

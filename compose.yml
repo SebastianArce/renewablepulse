@@ -1,4 +1,4 @@
-name: renewablepulse
+name: tianguiswatt
 
 # Base stack (production-safe defaults). Local-dev conveniences — exposed DB ports,
 # Traefik dashboard — live in compose.override.yml, which Docker applies automatically.
@@ -27,13 +27,13 @@ services:
     image: postgres:17
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-renewablepulse}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-renewablepulse}
-      POSTGRES_DB: ${POSTGRES_DB:-renewablepulse}
+      POSTGRES_USER: ${POSTGRES_USER:-tianguiswatt}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-tianguiswatt}
+      POSTGRES_DB: ${POSTGRES_DB:-tianguiswatt}
     volumes:
       - pg_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER:-renewablepulse} -d $${POSTGRES_DB:-renewablepulse}"]
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER:-tianguiswatt} -d $${POSTGRES_DB:-tianguiswatt}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -43,9 +43,9 @@ services:
     image: clickhouse/clickhouse-server:25.3
     restart: unless-stopped
     environment:
-      CLICKHOUSE_USER: ${CLICKHOUSE_USER:-renewablepulse}
-      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD:-renewablepulse}
-      CLICKHOUSE_DB: ${CLICKHOUSE_DB:-renewablepulse}
+      CLICKHOUSE_USER: ${CLICKHOUSE_USER:-tianguiswatt}
+      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD:-tianguiswatt}
+      CLICKHOUSE_DB: ${CLICKHOUSE_DB:-tianguiswatt}
     ulimits:
       nofile:
         soft: 262144

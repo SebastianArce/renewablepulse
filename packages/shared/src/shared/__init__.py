@@ -1,1 +1,1 @@
-"""Shared market-data models and clients for RenewablePulse."""
+"""Shared market-data models and clients for TianguisWatt."""

@@ -1,4 +1,4 @@
-renewablepulse:
+tianguiswatt:
   target: dev
   outputs:
     dev:
@@ -6,8 +6,8 @@ renewablepulse:
       driver: http
       host: "{{ env_var('CLICKHOUSE_HOST', 'localhost') }}"
       port: 8123
-      user: "{{ env_var('CLICKHOUSE_USER', 'renewablepulse') }}"
-      password: "{{ env_var('CLICKHOUSE_PASSWORD', 'renewablepulse') }}"
-      schema: "{{ env_var('CLICKHOUSE_DB', 'renewablepulse') }}"
+      user: "{{ env_var('CLICKHOUSE_USER', 'tianguiswatt') }}"
+      password: "{{ env_var('CLICKHOUSE_PASSWORD', 'tianguiswatt') }}"
+      schema: "{{ env_var('CLICKHOUSE_DB', 'tianguiswatt') }}"
       secure: false
       threads: 4

@@ -1,4 +1,4 @@
-"""Dagster code location for RenewablePulse."""
+"""Dagster code location for TianguisWatt."""
 
 from dagster import Definitions
 

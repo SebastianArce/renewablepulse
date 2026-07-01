@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "renewablepulse-frontend",
+      "name": "tianguiswatt-frontend",
       "dependencies": {
         "@tanstack/react-query": "^5",
         "clsx": "^2",

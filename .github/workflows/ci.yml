@@ -19,18 +19,18 @@ jobs:
     env:
       CLICKHOUSE_HOST: localhost
       CLICKHOUSE_PORT: "8123"
-      CLICKHOUSE_USER: renewablepulse
-      CLICKHOUSE_PASSWORD: renewablepulse
-      CLICKHOUSE_DB: renewablepulse
+      CLICKHOUSE_USER: tianguiswatt
+      CLICKHOUSE_PASSWORD: tianguiswatt
+      CLICKHOUSE_DB: tianguiswatt
     services:
       clickhouse:
         image: clickhouse/clickhouse-server:25.3
         ports:
           - 8123:8123
         env:
-          CLICKHOUSE_USER: renewablepulse
-          CLICKHOUSE_PASSWORD: renewablepulse
-          CLICKHOUSE_DB: renewablepulse
+          CLICKHOUSE_USER: tianguiswatt
+          CLICKHOUSE_PASSWORD: tianguiswatt
+          CLICKHOUSE_DB: tianguiswatt
         options: >-
           --health-cmd "wget --no-verbose --tries=1 --spider http://localhost:8123/ping || exit 1"
           --health-interval 10s
