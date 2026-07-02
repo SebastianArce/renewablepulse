@@ -102,3 +102,35 @@ jobs:
 
       - name: E2E (Playwright)
         run: bun run test:e2e
+
+  images:
+    name: Build images
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' # validate Dockerfiles pre-merge; no push
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Backend image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: backend/Dockerfile
+          push: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: Frontend image (prod)
+        uses: docker/build-push-action@v6
+        with:
+          context: ./frontend
+          file: frontend/Dockerfile.prod
+          push: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: Orchestrator image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: orchestrator/Dockerfile
+          push: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
