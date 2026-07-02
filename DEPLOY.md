@@ -36,10 +36,17 @@ sudo mkdir -p /opt/tianguiswatt && sudo chown deploy:deploy /opt/tianguiswatt
 > the existing Postgres/ClickHouse volumes.
 
 ## Deploying
-Push/merge to `main`. The workflow builds → pushes to GHCR → SSHes to the VM → pulls →
-runs migrations → `up -d`. Traefik requests a Let's Encrypt cert for `tianguiswatt.com`
-automatically (needs DNS pointing at the VM + port 80 open). First cert issuance takes a
-few seconds.
+Merging to `main` **builds** the images (SHA-tagged) — validating the Dockerfiles — but
+does **not** deploy. To release, push a version tag:
+```bash
+git tag v0.1.0 && git push origin v0.1.0
+```
+The tag triggers: build `:v0.1.0` + `:latest` → SSH to the VM → write `.env` → pull →
+migrate → `up -d`. Traefik requests a Let's Encrypt cert for `tianguiswatt.com`
+automatically (needs DNS + port 80 open); first issuance takes a few seconds.
+**Rollback** = redeploy an earlier tag.
+
+(Later, release-please (#8) will cut these version tags for you from Conventional Commits.)
 
 ## Operating
 - **Images:** `ghcr.io/sebastianarce/tianguiswatt-{backend,frontend,orchestrator}`.
