@@ -5,35 +5,35 @@ images and pushes them to **GHCR**, then — once enabled — deploys to a Hetzn
 SSH. Production runs `compose.yml` + `compose.prod.yml` (Traefik TLS, no exposed DB
 ports); ingestion + dbt run automatically via the Dagster daemon every 15 minutes.
 
-## One-time setup
+All config lives in **GitHub** (single source of truth); the deploy workflow writes the
+VM's `/opt/tianguiswatt/.env` from it on each rollout. Nothing secret is created by hand
+on the VM.
 
 **1. VM + DNS**
 Ubuntu VM with Docker, a `deploy` user in the `docker` group, firewall allowing
-`22/80/443`, and DNS `A` records `tianguiswatt.com` (+ `www`) → the VM's IPv4.
-
-**2. GitHub Actions secrets** (Settings → Secrets and variables → Actions → Secrets)
-- `DEPLOY_HOST` — the VM's IPv4
-- `DEPLOY_USER` — `deploy`
-- `DEPLOY_SSH_KEY` — the deploy **private** key
-
-**3. GitHub Actions variable** (same page → Variables)
-- `DEPLOY_ENABLED` = `true` — until set, images still build/push but the deploy step is
-  skipped (so merges don't fail before the VM is ready).
-
-**4. `.env` on the VM** at `/opt/tianguiswatt/.env`, owned by `deploy`, `chmod 600`:
-```dotenv
-DOMAIN=tianguiswatt.com
-ACME_EMAIL=you@example.com
-POSTGRES_USER=tianguiswatt
-POSTGRES_PASSWORD=<openssl rand -base64 24>
-POSTGRES_DB=tianguiswatt
-CLICKHOUSE_USER=tianguiswatt
-CLICKHOUSE_PASSWORD=<openssl rand -base64 24>
-CLICKHOUSE_DB=tianguiswatt
-```
+`22/80/443`, DNS `A` records `tianguiswatt.com` (+ `www`) → the VM's IPv4, and the deploy
+directory pre-created (only spot needing sudo):
 ```bash
 sudo mkdir -p /opt/tianguiswatt && sudo chown deploy:deploy /opt/tianguiswatt
 ```
+
+**2. GitHub Actions → Secrets** (Settings → Secrets and variables → Actions → Secrets)
+- `DEPLOY_HOST` — the VM's IPv4
+- `DEPLOY_USER` — `deploy`
+- `DEPLOY_SSH_KEY` — the deploy **private** key
+- `POSTGRES_PASSWORD` — `openssl rand -base64 24`
+- `CLICKHOUSE_PASSWORD` — `openssl rand -base64 24`
+
+**3. GitHub Actions → Variables** (same page → Variables)
+- `DOMAIN` = `tianguiswatt.com`
+- `ACME_EMAIL` = `you@example.com`
+- `POSTGRES_USER` = `tianguiswatt` · `POSTGRES_DB` = `tianguiswatt`
+- `CLICKHOUSE_USER` = `tianguiswatt` · `CLICKHOUSE_DB` = `tianguiswatt`
+- `DEPLOY_ENABLED` = `true` — until set, images still build/push but the deploy step is
+  skipped (so merges don't fail before the VM is ready).
+
+> The DB passwords must stay **stable** after the first deploy — changing them won't match
+> the existing Postgres/ClickHouse volumes.
 
 ## Deploying
 Push/merge to `main`. The workflow builds → pushes to GHCR → SSHes to the VM → pulls →

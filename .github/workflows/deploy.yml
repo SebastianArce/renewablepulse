@@ -69,14 +69,33 @@ jobs:
         uses: appleboy/ssh-action@v1
         env:
           GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DOMAIN: ${{ vars.DOMAIN }}
+          ACME_EMAIL: ${{ vars.ACME_EMAIL }}
+          POSTGRES_USER: ${{ vars.POSTGRES_USER }}
+          POSTGRES_DB: ${{ vars.POSTGRES_DB }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          CLICKHOUSE_USER: ${{ vars.CLICKHOUSE_USER }}
+          CLICKHOUSE_DB: ${{ vars.CLICKHOUSE_DB }}
+          CLICKHOUSE_PASSWORD: ${{ secrets.CLICKHOUSE_PASSWORD }}
         with:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
-          envs: GHCR_TOKEN
+          envs: GHCR_TOKEN,DOMAIN,ACME_EMAIL,POSTGRES_USER,POSTGRES_DB,POSTGRES_PASSWORD,CLICKHOUSE_USER,CLICKHOUSE_DB,CLICKHOUSE_PASSWORD
           script: |
             set -euo pipefail
             cd /opt/tianguiswatt
+            umask 077
+            cat > .env <<EOF
+            DOMAIN=${DOMAIN}
+            ACME_EMAIL=${ACME_EMAIL}
+            POSTGRES_USER=${POSTGRES_USER}
+            POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+            POSTGRES_DB=${POSTGRES_DB}
+            CLICKHOUSE_USER=${CLICKHOUSE_USER}
+            CLICKHOUSE_PASSWORD=${CLICKHOUSE_PASSWORD}
+            CLICKHOUSE_DB=${CLICKHOUSE_DB}
+            EOF
             echo "$GHCR_TOKEN" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
             export IMAGE_TAG=${{ github.sha }}
             COMPOSE="docker compose -f compose.yml -f compose.prod.yml"
