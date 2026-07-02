@@ -2,8 +2,7 @@ name: Deploy
 
 on:
   push:
-    branches: [main] # build images (validate Dockerfiles); no deploy
-    tags: ["v*"] # build + deploy this version
+    tags: ["v*"] # build + push images to GHCR, then deploy this version
   workflow_dispatch:
 
 permissions:
